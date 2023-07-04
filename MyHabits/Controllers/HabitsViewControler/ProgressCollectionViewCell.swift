@@ -3,11 +3,11 @@
 import Foundation
 import UIKit
 
-class ProgressCollectionViewCell: UICollectionReusableView {
+class ProgressCollectionViewCell: UICollectionViewCell {
     
     static let id = "ProgressCollectionViewCell"
     
-    private let progressLabel: UILabel = {
+    private lazy var progressLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Всё получится!"
@@ -18,17 +18,18 @@ class ProgressCollectionViewCell: UICollectionReusableView {
         return label
     }()
     
-    private let progressView: UIProgressView = {
+    private lazy var progressView: UIProgressView = {
         let view = UIProgressView()
-        view.backgroundColor = .systemGray2
-        view.trackTintColor = .systemGray2
+        view.tintColor = .pinkColor
+        view.trackTintColor = .systemGray6
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
+        view.progress = HabitsStore.shared.todayProgress
         
         return view
     }()
     
-    private let progressNumber: UILabel = {
+    private lazy var progressNumber: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .systemGray2
@@ -45,7 +46,7 @@ class ProgressCollectionViewCell: UICollectionReusableView {
         tuneCell()
         addSub()
         setUp()
-        
+        config()
     }
     
     required init?(coder: NSCoder) {
@@ -55,6 +56,7 @@ class ProgressCollectionViewCell: UICollectionReusableView {
 //MARK: - Func
     
     private func tuneCell(){
+        
         backgroundColor = .white
         layer.cornerRadius = 10
         
@@ -70,12 +72,9 @@ class ProgressCollectionViewCell: UICollectionReusableView {
     
     private func setUp(){
         
-        progressNumber.text = "\(Int(progressView.progress)) %"
-        progressView.progress = HabitsStore.shared.todayProgress
+        
         
         NSLayoutConstraint.activate([
-            
-            
             
             progressLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             progressLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
@@ -90,6 +89,10 @@ class ProgressCollectionViewCell: UICollectionReusableView {
             progressNumber.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
         ])
         
+    }
+    func config(){
+        progressNumber.text = "\(Int(HabitsStore.shared.todayProgress*100)) %"
+        progressView.progress = HabitsStore.shared.todayProgress
     }
     
 }

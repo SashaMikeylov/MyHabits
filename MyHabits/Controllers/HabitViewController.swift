@@ -2,8 +2,12 @@
 import Foundation
 import UIKit
 
+var callPlace = ""
+var habitIndex = Int()
+
 class HabitViewController: UIViewController {
     
+
     private let mainView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -12,40 +16,7 @@ class HabitViewController: UIViewController {
         return view
     }()
     
-    private lazy var closedButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .grayColor
-        button.setTitle("Отменить", for: .normal)
-        button.setTitleColor(.pinkColor, for: .normal)
-        button.addTarget(self, action: #selector(closedButtonAction(_sender: )), for: .touchUpInside)
-        
-        return button
-    }()
-    
-    private let createTitle: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        label.textColor = .black
-        label.text = "Создать"
-        
-        return label
-    }()
-    
-    private let saveButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Сохранить", for: .normal)
-        button.setTitleColor(.pinkColor, for: .normal)
-        button.backgroundColor = .grayColor
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        
-        
-        return button
-    }()
-    
-    private let habitName: UILabel = {
+    private lazy var habitName: UILabel = {
         let name = UILabel()
         name.text = "НАЗВАНИЕ"
         name.translatesAutoresizingMaskIntoConstraints = false
@@ -72,7 +43,7 @@ class HabitViewController: UIViewController {
         return descrip
     }()
     
-    private let colorLabel: UILabel = {
+    private lazy var colorLabel: UILabel = {
         let color = UILabel()
         color.text = "ЦВЕТ"
         color.translatesAutoresizingMaskIntoConstraints = false
@@ -92,7 +63,7 @@ class HabitViewController: UIViewController {
         return button
     }()
     
-    private let timeLabel: UILabel = {
+    private lazy var timeLabel: UILabel = {
         let label = UILabel()
         label.text = "ВРЕМЯ"
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -103,7 +74,7 @@ class HabitViewController: UIViewController {
     }()
     
     
-    private var dayLabel: UILabel = {
+    private lazy var dayLabel: UILabel = {
         let label = UILabel()
         label.text = "Каждый день в "
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -113,7 +84,7 @@ class HabitViewController: UIViewController {
         return label
     }()
     
-    private let timePicker: UIDatePicker = {
+    private lazy var timePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = .time
         picker.translatesAutoresizingMaskIntoConstraints = false
@@ -125,34 +96,82 @@ class HabitViewController: UIViewController {
         return picker
     }()
     
+    private lazy var  deleteLabel: UIButton = {
+        let label = UIButton()
+        label.setTitle("Удалить привычку", for: .normal)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.setTitleColor(.red, for: .normal)
+        label.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.backgroundColor = .white
+        label.addTarget(self, action: #selector(deleteHabit), for: .touchUpInside)
+        
+        return label
+    }()
+    
+    private let allertController = UIAlertController(title: "Удалить привычку",
+                                                     message: "",
+                                                     preferredStyle: .alert)
     
 //MARK: -Life
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
+        tuneNavBar()
         tuneView()
         addSub()
         setUp()
+       
+        
+        
+        
+        let alertAction = UIAlertAction(title: "Отмена", style: .cancel)
+        let alertAction1 = UIAlertAction(title: "Удалить", style: .default) {(action) in
+            HabitsStore.shared.habits.remove(at: habitIndex)
+            self.dismiss(animated: true)
+            
+        }
+        
+        allertController.addAction(alertAction)
+        allertController.addAction(alertAction1)
         
     }
     
 //MARK: -Func
     
+    func tuneNavBar(){
+        
+        let cancelButton = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(closedButtonAction))
+        navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.leftBarButtonItem?.tintColor = .pinkColor
+        
+        if callPlace == "newHabit" {
+            let createButton = UIBarButtonItem(title: "Создать", style: .plain, target: self, action: #selector(createButtonAction))
+            navigationItem.rightBarButtonItem = createButton
+            navigationItem.rightBarButtonItem?.tintColor = .pinkColor
+            
+            self.navigationItem.title = "Создать"
+        } else if callPlace == "detailHabit"{
+            let saveButton = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(saveButtonAction))
+            navigationItem.rightBarButtonItem = saveButton
+            navigationItem.rightBarButtonItem?.tintColor = .pinkColor
+            
+            navigationController?.navigationBar.prefersLargeTitles = false
+            self.navigationItem.title = "Править"
+        }
+        
+        
+    }
+    
     private func tuneView(){
         view.backgroundColor = .grayColor
-        saveButton.addTarget(self, action: #selector(saveButtonAction), for: .touchUpInside)
+        
         
     }
     
     private func addSub(){
         
         view.addSubview(mainView)
-        view.addSubview(closedButton)
-        view.addSubview(createTitle)
-        view.addSubview(saveButton)
         mainView.addSubview(habitName)
         mainView.addSubview(habitDescription)
         mainView.addSubview(colorLabel)
@@ -162,6 +181,9 @@ class HabitViewController: UIViewController {
         mainView.addSubview(timePicker)
     }
     
+    func navBar(){
+    
+    }
     
 //MARK: -SetUp
     
@@ -174,18 +196,6 @@ class HabitViewController: UIViewController {
             mainView.leftAnchor.constraint(equalTo: safeAreaGuide.leftAnchor),
             mainView.rightAnchor.constraint(equalTo: safeAreaGuide.rightAnchor),
             mainView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -40),
-            
-            closedButton.heightAnchor.constraint(equalToConstant: 20),
-            closedButton.widthAnchor.constraint(equalToConstant: 100),
-            closedButton.bottomAnchor.constraint(equalTo: mainView.topAnchor, constant: -10),
-            closedButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10),
-            
-            createTitle.bottomAnchor.constraint(equalTo: mainView.topAnchor, constant: -10),
-            createTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            
-            saveButton.bottomAnchor.constraint(equalTo: mainView.topAnchor, constant: -3),
-            saveButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12),
             
             habitName.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 20),
             habitName.leftAnchor.constraint(equalTo: mainView.leftAnchor, constant: 15),
@@ -213,7 +223,27 @@ class HabitViewController: UIViewController {
             timePicker.topAnchor.constraint(equalTo: timeLabel.bottomAnchor,constant: 5),
             timePicker.leftAnchor.constraint(equalTo: dayLabel.rightAnchor, constant: 5),
         ])
+        
+        if callPlace == "detailHabit" {
+            self.navigationItem.title = "Править"
+            habitDescription.text = HabitsStore.shared.habits[habitIndex].name
+            timePicker.date = HabitsStore.shared.habits[habitIndex].date
+            colorButton.backgroundColor = HabitsStore.shared.habits[habitIndex].color
+            
+            view.addSubview(deleteLabel)
+            NSLayoutConstraint.activate([
+                
+                deleteLabel.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -10),
+                deleteLabel.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
+                deleteLabel.heightAnchor.constraint(equalToConstant: 40),
+                
+                mainView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
+                
+            ])
+        }
     }
+    
+    
 //MARK: -objc func
 
     
@@ -223,7 +253,7 @@ class HabitViewController: UIViewController {
     
     @objc func colorAction(){
         let colorPicker = UIColorPickerViewController()
-        colorPicker.title = "Habit Color"
+        colorPicker.title = "Цвет привычки"
         colorPicker.supportsAlpha = false
         colorPicker.delegate = self
         colorPicker.modalPresentationStyle = .popover
@@ -232,7 +262,19 @@ class HabitViewController: UIViewController {
         
     }
     
+    
     @objc func saveButtonAction(){
+        
+        HabitsStore.shared.habits[habitIndex].name = habitDescription.text ?? ""
+        HabitsStore.shared.habits[habitIndex].color = colorButton.backgroundColor ?? .orange
+        HabitsStore.shared.habits[habitIndex].date = timePicker.date
+        HabitsStore.shared.save()
+        
+        dismiss(animated: true)
+    }
+                                             
+                                             
+    @objc func createButtonAction(){
         let newHabit = Habit(name: habitDescription.text ?? "Без названия ",
                              date: timePicker.date,
                              color: colorButton.backgroundColor ?? .orangeColor)
@@ -240,6 +282,13 @@ class HabitViewController: UIViewController {
         let store = HabitsStore.shared
         store.habits.append(newHabit)
         dismiss(animated: true)
+    }
+    
+    @objc func deleteHabit(){
+        
+        allertController.message = "Вы хотите удалить привычку \(HabitsStore.shared.habits[habitIndex].name) ?"
+        self.present(allertController, animated: true)
+        
     }
     
 }
@@ -252,6 +301,7 @@ extension HabitViewController: UITextFieldDelegate {
     }
 }
 extension HabitViewController: UIColorPickerViewControllerDelegate{
+    
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
         colorButton.backgroundColor = viewController.selectedColor
     }

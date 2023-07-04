@@ -22,15 +22,15 @@ class HabitsViewController: UIViewController {
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.backgroundColor = .systemGray5
         
+        viewLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        viewLayout.minimumLineSpacing = 15
+        viewLayout.minimumInteritemSpacing = -20
         
-        viewLayout.minimumLineSpacing = 10
-        viewLayout.minimumInteritemSpacing = 10
         
         
+        viewLayout.sectionInset = .init(top: 10, left: 15, bottom: 10, right: 15)
         
-        viewLayout.sectionInset = .init(top: 10, left: 10, bottom: 10, right: 10)
         
-        viewLayout.headerReferenceSize = CGSize(width: 100, height: 70)
         
         
         return collection
@@ -40,14 +40,23 @@ class HabitsViewController: UIViewController {
 // MARK: -Life
     
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tuneView()
         addSub()
+        tuneCollection()
+        tuneView()
         addBarButton()
         setUp()
-        tuneCollection()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        self.habitCollection.reloadData()
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadDataAction(notificiation: )), name: Notification.Name("reloadData"), object: nil)
+        
     }
     
 //MARK: -Func
@@ -66,10 +75,11 @@ class HabitsViewController: UIViewController {
     }
     
     private func addBarButton(){
-        print(habits)
+
         let addButton = UIBarButtonItem(image: UIImage(named: "Plus"), style: .done, target: self, action: #selector(addButtonAction))
         addButton.tintColor = .pinkColor
         navigationItem.rightBarButtonItem = addButton
+        navigationItem.title = "Сегодня"
     }
     
     private func setUp(){
@@ -91,21 +101,32 @@ class HabitsViewController: UIViewController {
     
     private func tuneCollection(){
         
-        habitCollection.register(ProgressCollectionViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProgressCollectionViewCell.id)
+        
+        habitCollection.register(ProgressCollectionViewCell.self, forCellWithReuseIdentifier: ProgressCollectionViewCell.id)
+        
         habitCollection.register(HabitCollectionViewCell.self, forCellWithReuseIdentifier: HabitCollectionViewCell.id)
         
         habitCollection.dataSource = self
+        habitCollection.delegate = self
     }
     
 //MARK: -
+    
     @objc func addButtonAction(){
-        let habitViewController = HabitViewController()
         
+       callPlace = "newHabit"
+        
+        let habitViewController = UINavigationController(rootViewController: HabitViewController())
         habitViewController.modalPresentationStyle = .fullScreen
-        
         
         present(habitViewController, animated: true)
     }
+    
+    @objc func reloadDataAction(notificiation: Notification){
+        habitCollection.reloadData()
+    }
+    
+    
     
 }
 
@@ -114,31 +135,42 @@ extension HabitsViewController: UICollectionViewDataSource {
 
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        habits.count
+        habits.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HabitCollectionViewCell.id, for: indexPath) as? HabitCollectionViewCell else{return UICollectionViewCell()}
-        cell.configure(habit: habits[indexPath.row])
-        
+        if  indexPath.row == 0 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProgressCollectionViewCell.id, for: indexPath) as? ProgressCollectionViewCell else {return UICollectionViewCell()}
+            cell.config()
+            return cell
+        }
+            
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HabitCollectionViewCell.id, for: indexPath) as? HabitCollectionViewCell else {return UICollectionViewCell()}
+        cell.configure(index: indexPath.row - 1)
+            
         return cell
         
     }
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        switch kind {
-            
-        case UICollectionView.elementKindSectionHeader:
-           guard let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ProgressCollectionViewCell.id , for: indexPath) as? ProgressCollectionViewCell else {return UICollectionReusableView() }
-            return cell
-        default: return UICollectionReusableView()
-            
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.row != 0 {
+            let habitDetailsViewController = HabitDetailsViewController()
+            habitDetailsViewController.index = indexPath.row - 1
+            navigationController?.pushViewController(habitDetailsViewController, animated: true)
         }
     }
     
-    
-    
 }
-
+extension HabitsViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if indexPath.row == 0{
+            
+            return CGSize(width: 365, height: 65)
+        }else {
+            
+            return CGSize(width: 365, height: 150)
+        }
+    }
+}

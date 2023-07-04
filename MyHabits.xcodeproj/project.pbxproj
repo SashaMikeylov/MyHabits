@@ -19,6 +19,7 @@
 		24C1195F2A4B12180079F210 /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C1195E2A4B12180079F210 /* Info.swift */; };
 		24C119622A4EF2C80079F210 /* ProgressCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C119612A4EF2C80079F210 /* ProgressCollectionViewCell.swift */; };
 		24C119642A4F00D80079F210 /* HabitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C119632A4F00D80079F210 /* HabitCollectionViewCell.swift */; };
+		24C119682A5412340079F210 /* HabitDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C119672A5412340079F210 /* HabitDetailsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		24C1195E2A4B12180079F210 /* Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Info.swift; sourceTree = "<group>"; };
 		24C119612A4EF2C80079F210 /* ProgressCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCollectionViewCell.swift; sourceTree = "<group>"; };
 		24C119632A4F00D80079F210 /* HabitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCollectionViewCell.swift; sourceTree = "<group>"; };
+		24C119672A5412340079F210 /* HabitDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				24C119602A4EF2980079F210 /* HabitsViewControler */,
 				24C1194F2A49CED80079F210 /* InfoViewController.swift */,
 				24C1195C2A4AFB3D0079F210 /* HabitViewController.swift */,
+				24C119672A5412340079F210 /* HabitDetailsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -191,6 +194,7 @@
 				24C1195F2A4B12180079F210 /* Info.swift in Sources */,
 				24C119312A497FBA0079F210 /* AppDelegate.swift in Sources */,
 				24C1195D2A4AFB3D0079F210 /* HabitViewController.swift in Sources */,
+				24C119682A5412340079F210 /* HabitDetailsViewController.swift in Sources */,
 				24C119332A497FBA0079F210 /* SceneDelegate.swift in Sources */,
 				24C119622A4EF2C80079F210 /* ProgressCollectionViewCell.swift in Sources */,
 				24C1195B2A4AF4A90079F210 /* ColorExtension.swift in Sources */,
