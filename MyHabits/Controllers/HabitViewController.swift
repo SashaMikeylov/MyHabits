@@ -233,11 +233,13 @@ class HabitViewController: UIViewController {
             view.addSubview(deleteLabel)
             NSLayoutConstraint.activate([
                 
+                mainView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                
                 deleteLabel.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -10),
                 deleteLabel.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
                 deleteLabel.heightAnchor.constraint(equalToConstant: 40),
                 
-                mainView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
+                
                 
             ])
         }

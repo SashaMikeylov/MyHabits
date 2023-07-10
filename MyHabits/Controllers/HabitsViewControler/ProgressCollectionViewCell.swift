@@ -55,6 +55,8 @@ class ProgressCollectionViewCell: UICollectionViewCell {
     
 //MARK: - Func
     
+    
+    
     private func tuneCell(){
         
         backgroundColor = .white

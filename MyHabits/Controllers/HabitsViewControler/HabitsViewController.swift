@@ -53,7 +53,7 @@ class HabitsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        navigationController?.navigationBar.prefersLargeTitles = true
         self.habitCollection.reloadData()
         NotificationCenter.default.addObserver(self, selector: #selector(reloadDataAction(notificiation: )), name: Notification.Name("reloadData"), object: nil)
         
@@ -75,7 +75,8 @@ class HabitsViewController: UIViewController {
     }
     
     private func addBarButton(){
-
+        
+        
         let addButton = UIBarButtonItem(image: UIImage(named: "Plus"), style: .done, target: self, action: #selector(addButtonAction))
         addButton.tintColor = .pinkColor
         navigationItem.rightBarButtonItem = addButton
@@ -159,6 +160,7 @@ extension HabitsViewController: UICollectionViewDataSource {
             let habitDetailsViewController = HabitDetailsViewController()
             habitDetailsViewController.index = indexPath.row - 1
             navigationController?.pushViewController(habitDetailsViewController, animated: true)
+            
         }
     }
     

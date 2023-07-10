@@ -61,7 +61,11 @@ class HabitDetailsViewController: UIViewController {
     
     private func addTabBar(){
         let editButton = UIBarButtonItem(title: "Править", style: .plain, target: self, action: #selector(tabBarAction))
+    
         navigationItem.rightBarButtonItem = editButton
+        
+        navigationItem.rightBarButtonItem?.tintColor = .pinkColor
+        navigationItem.leftBarButtonItem?.tintColor = .pinkColor
     }
     
     private func tableTune(){

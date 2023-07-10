@@ -136,6 +136,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
    
     func selectedButton(){
         
+        imageButton.isHidden = false
         habitAction.addSubview(imageButton)
         imageButton.heightAnchor.constraint(equalToConstant: 70).isActive = true
         imageButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
@@ -147,17 +148,19 @@ class HabitCollectionViewCell: UICollectionViewCell {
     func notSelectedButton(){
         
         habitAction.backgroundColor = .white
-        
+        imageButton.isHidden = true
     }
     
     @objc func checkAction(){
+        
         let index = habitName.tag
         
+
         if HabitsStore.shared.habits[index].isAlreadyTakenToday == false {
             notSelectedButton()
             HabitsStore.shared.track(HabitsStore.shared.habits[index])
             habitCounter.text = "\(HabitsStore.shared.habits[index].trackDates.count )"
-            
+
             NotificationCenter.default.post(name: Notification.Name("reloadData"), object: nil)
         }
     }
