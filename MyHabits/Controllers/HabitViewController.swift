@@ -7,7 +7,10 @@ var habitIndex = Int()
 
 class HabitViewController: UIViewController {
     
-
+    
+    
+    var habitsViewController = HabitsViewController ()
+    
     private let mainView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -128,8 +131,9 @@ class HabitViewController: UIViewController {
         let alertAction = UIAlertAction(title: "Отмена", style: .cancel)
         let alertAction1 = UIAlertAction(title: "Удалить", style: .default) {(action) in
             HabitsStore.shared.habits.remove(at: habitIndex)
-            self.dismiss(animated: true)
-            
+            self.habitsViewController.reloadCollection()
+            self.navigationController?.popToRootViewController(animated: true)
+            self.navigationController?.dismiss(animated: true)
         }
         
         allertController.addAction(alertAction)
@@ -272,7 +276,9 @@ class HabitViewController: UIViewController {
         HabitsStore.shared.habits[habitIndex].date = timePicker.date
         HabitsStore.shared.save()
         
-        dismiss(animated: true)
+        habitsViewController.reloadCollection()
+        
+        navigationController?.popViewController(animated: true)
     }
                                              
                                              
@@ -283,6 +289,9 @@ class HabitViewController: UIViewController {
         
         let store = HabitsStore.shared
         store.habits.append(newHabit)
+        habitsViewController.reloadCollection()
+        
+        navigationController?.popViewController(animated: true)
         dismiss(animated: true)
     }
     
@@ -290,7 +299,7 @@ class HabitViewController: UIViewController {
         
         allertController.message = "Вы хотите удалить привычку \(HabitsStore.shared.habits[habitIndex].name) ?"
         self.present(allertController, animated: true)
-        
+        habitsViewController.reloadCollection()
     }
     
 }

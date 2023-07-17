@@ -49,7 +49,7 @@ class HabitsViewController: UIViewController {
         tuneView()
         addBarButton()
         setUp()
-        
+        self.habitCollection.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,6 +57,10 @@ class HabitsViewController: UIViewController {
         self.habitCollection.reloadData()
         NotificationCenter.default.addObserver(self, selector: #selector(reloadDataAction(notificiation: )), name: Notification.Name("reloadData"), object: nil)
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+         
     }
     
 //MARK: -Func
@@ -113,6 +117,10 @@ class HabitsViewController: UIViewController {
     
 //MARK: -
     
+     func reloadCollection(){
+        habitCollection.reloadData()
+    }
+    
     @objc func addButtonAction(){
         
        callPlace = "newHabit"
@@ -134,6 +142,7 @@ class HabitsViewController: UIViewController {
 extension HabitsViewController: UICollectionViewDataSource {
     
 
+   
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         habits.count + 1
@@ -145,11 +154,15 @@ extension HabitsViewController: UICollectionViewDataSource {
         if  indexPath.row == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProgressCollectionViewCell.id, for: indexPath) as? ProgressCollectionViewCell else {return UICollectionViewCell()}
             cell.config()
+            
+            
             return cell
         }
             
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HabitCollectionViewCell.id, for: indexPath) as? HabitCollectionViewCell else {return UICollectionViewCell()}
         cell.configure(index: indexPath.row - 1)
+        
+        
             
         return cell
         
@@ -174,5 +187,14 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
             
             return CGSize(width: 365, height: 150)
         }
+    }
+}
+
+extension HabitsViewController: UICollectionViewDelegate {
+    
+    
+    
+    func reload(){
+        habitCollection.reloadData()
     }
 }
