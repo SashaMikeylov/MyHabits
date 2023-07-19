@@ -145,7 +145,8 @@ extension HabitsViewController: UICollectionViewDataSource {
    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        habits.count + 1
+        HabitsStore.shared.habits.count + 1
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

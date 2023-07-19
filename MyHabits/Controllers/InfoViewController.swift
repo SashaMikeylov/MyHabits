@@ -4,18 +4,6 @@ import UIKit
 
 class InfoViewController: UIViewController {
 
-    
-//    private let label: UILabel = {
-//        let label = UILabel()
-//        label.translatesAutoresizingMaskIntoConstraints = false
-//        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-//        label.text = "Привычка за 21 день"
-//        
-//        return label
-//    }()
-    
-    
-    
     private let infoText: UITextView = {
         let text = UITextView()
         text.font = UIFont.systemFont(ofSize: 18, weight: .regular)
@@ -71,7 +59,7 @@ class InfoViewController: UIViewController {
         view.addSubview(mainView)
         mainView.addSubview(infoScroll)
         mainView.addSubview(infoText)
-//        mainView.addSubview(label)
+
     }
     
     private func setUp(){

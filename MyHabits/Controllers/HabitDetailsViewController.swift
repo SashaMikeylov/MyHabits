@@ -30,6 +30,14 @@ class HabitDetailsViewController: UIViewController {
         addSub()
         setUp()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if del == true {
+            self.navigationController?.popViewController(animated: true)
+            del = false
+        }
+    }
+    
 //MARK: -func
     
     private func tuneView(){

@@ -4,6 +4,7 @@ import UIKit
 
 var callPlace = ""
 var habitIndex = Int()
+var del = false
 
 class HabitViewController: UIViewController {
     
@@ -131,8 +132,8 @@ class HabitViewController: UIViewController {
         let alertAction = UIAlertAction(title: "Отмена", style: .cancel)
         let alertAction1 = UIAlertAction(title: "Удалить", style: .default) {(action) in
             HabitsStore.shared.habits.remove(at: habitIndex)
+            del = true
             self.habitsViewController.reloadCollection()
-            self.navigationController?.popToRootViewController(animated: true)
             self.navigationController?.dismiss(animated: true)
         }
         
@@ -141,6 +142,10 @@ class HabitViewController: UIViewController {
         
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        checkStatus()
+    }
 //MARK: -Func
     
     func tuneNavBar(){
@@ -228,6 +233,10 @@ class HabitViewController: UIViewController {
             timePicker.leftAnchor.constraint(equalTo: dayLabel.rightAnchor, constant: 5),
         ])
         
+    }
+    
+    private func checkStatus(){
+        
         if callPlace == "detailHabit" {
             self.navigationItem.title = "Править"
             habitDescription.text = HabitsStore.shared.habits[habitIndex].name
@@ -235,6 +244,7 @@ class HabitViewController: UIViewController {
             colorButton.backgroundColor = HabitsStore.shared.habits[habitIndex].color
             
             view.addSubview(deleteLabel)
+            
             NSLayoutConstraint.activate([
                 
                 mainView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -276,9 +286,9 @@ class HabitViewController: UIViewController {
         HabitsStore.shared.habits[habitIndex].date = timePicker.date
         HabitsStore.shared.save()
         
-        habitsViewController.reloadCollection()
         
-        navigationController?.popViewController(animated: true)
+        
+        dismiss(animated: true)
     }
                                              
                                              
@@ -299,7 +309,7 @@ class HabitViewController: UIViewController {
         
         allertController.message = "Вы хотите удалить привычку \(HabitsStore.shared.habits[habitIndex].name) ?"
         self.present(allertController, animated: true)
-        habitsViewController.reloadCollection()
+        
     }
     
 }
