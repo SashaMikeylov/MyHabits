@@ -1,16 +1,15 @@
 
 
+import AudioToolbox
 import Foundation
 import UIKit
 
 
 
 
-class HabitCollectionViewCell: UICollectionViewCell {
+final class HabitCollectionViewCell: UICollectionViewCell {
     
   static var id = "HabitCollectionViewCell"
-    
-    
     
     private lazy var habitName: UILabel = {
         let name = UILabel()
@@ -46,7 +45,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 30
-        button.backgroundColor = .white
+        button.backgroundColor = UIColor(named: "buttonColor")
         button.layer.borderWidth = 3
         button.addTarget(self, action: #selector(checkAction), for: .touchUpInside)
         button.layer.masksToBounds = true
@@ -71,7 +70,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         tuneView()
         addSub()
         setUp()
-        
+       
     }
     
     required init?(coder: NSCoder) {
@@ -81,7 +80,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
 //MARK: -func
     
     private func tuneView(){
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = UIColor(named: "barColor")
         contentView.layer.cornerRadius = 10
         contentView.clipsToBounds = true
       
@@ -93,6 +92,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(habitTime)
         contentView.addSubview(habitCounter)
         contentView.addSubview(habitAction)
+        habitAction.addSubview(imageButton)
     }
     
     private func setUp(){
@@ -113,7 +113,11 @@ class HabitCollectionViewCell: UICollectionViewCell {
             habitAction.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 43),
             habitAction.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
             
-            
+           
+            imageButton.heightAnchor.constraint(equalToConstant: 50),
+            imageButton.widthAnchor.constraint(equalToConstant: 50),
+            imageButton.centerYAnchor.constraint(equalTo: habitAction.centerYAnchor),
+            imageButton.centerXAnchor.constraint(equalTo: habitAction.centerXAnchor),
         ])
     }
     
@@ -126,28 +130,29 @@ class HabitCollectionViewCell: UICollectionViewCell {
         habitCounter.text = "Счётчик: \(HabitsStore.shared.habits[index].trackDates.count)"
         habitAction.layer.borderColor = HabitsStore.shared.habits[index].color.cgColor
         
+        UIView.animate(withDuration: 3, delay: 0.5, usingSpringWithDamping: 2, initialSpringVelocity: 5, animations: {
+            self.imageButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            self.imageButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+            self.imageButton.transform = CGAffineTransform(scaleX: 1.6, y: 1.6)
+        })
+        
         if HabitsStore.shared.habits[index].isAlreadyTakenToday == false {
             notSelectedButton()
-        }else {
+        } else {
             selectedButton()
         }
     }
     
-   
+    
     func selectedButton(){
         
         imageButton.isHidden = false
-        habitAction.addSubview(imageButton)
-        imageButton.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        imageButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        imageButton.centerYAnchor.constraint(equalTo: habitAction.centerYAnchor).isActive = true
-        imageButton.centerXAnchor.constraint(equalTo: habitAction.centerXAnchor).isActive = true
         imageButton.setImageColor(color:  habitName.textColor)
     }
     
     func notSelectedButton(){
         
-        habitAction.backgroundColor = .white
+        habitAction.backgroundColor = UIColor(named: "buttonColor")
         imageButton.isHidden = true
     }
     
@@ -155,20 +160,20 @@ class HabitCollectionViewCell: UICollectionViewCell {
         
         let index = habitName.tag
         
-
         if HabitsStore.shared.habits[index].isAlreadyTakenToday == false {
+            AudioServicesPlayAlertSound(SystemSoundID(1520))
             notSelectedButton()
             HabitsStore.shared.track(HabitsStore.shared.habits[index])
             habitCounter.text = "\(HabitsStore.shared.habits[index].trackDates.count )"
-
+            
+            
             NotificationCenter.default.post(name: Notification.Name("reloadData"), object: nil)
         }
     }
-    
-    
-    
-    
 }
+
+//MARK: - Extensions
+
 extension UIImageView {
     func setImageColor(color: UIColor) {
         let templateImage = self.image?.withRenderingMode(.alwaysTemplate)

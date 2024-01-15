@@ -3,7 +3,7 @@
 import Foundation
 import UIKit
 
-class ProgressCollectionViewCell: UICollectionViewCell {
+final class ProgressCollectionViewCell: UICollectionViewCell {
     
     static let id = "ProgressCollectionViewCell"
     
@@ -14,7 +14,7 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         label.textColor = .systemGray2
         
-        
+      
         return label
     }()
     
@@ -59,7 +59,7 @@ class ProgressCollectionViewCell: UICollectionViewCell {
     
     private func tuneCell(){
         
-        backgroundColor = .white
+        backgroundColor = UIColor(named: "barColor")
         layer.cornerRadius = 10
         
         

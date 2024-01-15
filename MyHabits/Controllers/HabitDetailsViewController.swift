@@ -4,9 +4,9 @@ import Foundation
 
 import UIKit
 
-class HabitDetailsViewController: UIViewController {
+final class HabitDetailsViewController: UIViewController {
     
-    var index: Int = 0
+   var index: Int = 0
     
     
     private lazy var tableView: UITableView = {
@@ -27,7 +27,6 @@ class HabitDetailsViewController: UIViewController {
         tableTune()
         tuneView()
         addTabBar()
-        addSub()
         setUp()
     }
     
@@ -41,20 +40,23 @@ class HabitDetailsViewController: UIViewController {
 //MARK: -func
     
     private func tuneView(){
-        
-        view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = UIColor.purple
+        view.backgroundColor = UIColor(named: "barColor")
         title = HabitsStore.shared.habits[index].name
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     
-    private func addSub(){
+    
         
-        view.addSubview(tableView)
-    }
+    
+    
     
     
     private func setUp(){
+        
+        view.addSubview(tableView)
+        
         let safeAreaGuide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             
@@ -86,12 +88,13 @@ class HabitDetailsViewController: UIViewController {
     @objc func tabBarAction(){
         
         callPlace = "detailHabit"
-        
-        let habitViewController = UINavigationController(rootViewController: HabitViewController())
-        habitViewController.modalPresentationStyle = .fullScreen
+        let habitViewController = HabitViewController()
+        habitViewController.habitIndex = index
+        let habitViewControllerNav = UINavigationController(rootViewController: habitViewController)
+        habitViewControllerNav.modalPresentationStyle = .fullScreen
        
         
-        present(habitViewController, animated: true, completion: nil)
+        present(habitViewControllerNav, animated: true, completion: nil)
         
         
     }
@@ -108,13 +111,13 @@ extension HabitDetailsViewController: UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+    
         let cell = tableView.dequeueReusableCell(withIdentifier: "defaultTableCellIndetifier", for: indexPath)
         
         let text = HabitsStore.shared.trackDateString(forIndex: indexPath.row)
         cell.textLabel?.text = text
         
-        if HabitsStore.shared.habit(HabitsStore.shared.habits[index], isTrackedIn: HabitsStore.shared.dates[indexPath.row]) {
+        if HabitsStore.shared.habits[index].isAlreadyTakenToday {
             
             let image = UIImageView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
             image.image = UIImage(named: "TableIcon")

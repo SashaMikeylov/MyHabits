@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         let tabBarController = UITabBarController()
         
-        tabBarController.tabBar.backgroundColor = .grayColor
+        tabBarController.tabBar.backgroundColor = UIColor(named: "barColor")
         tabBarController.tabBar.tintColor = .pinkColor
         
         let habitsViwController = HabitsViewController()

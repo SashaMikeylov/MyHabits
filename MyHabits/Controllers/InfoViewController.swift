@@ -2,15 +2,15 @@
 import Foundation
 import UIKit
 
-class InfoViewController: UIViewController {
-
+final class InfoViewController: UIViewController {
+    
     private let infoText: UITextView = {
         let text = UITextView()
         text.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         text.translatesAutoresizingMaskIntoConstraints = false
         text.isEditable = false
-        
-        
+        text.text = String.infoText
+        text.backgroundColor = UIColor(named: "backColor")
         
         return text
         
@@ -32,37 +32,31 @@ class InfoViewController: UIViewController {
         return scroll
     }()
     
-    
-    
 //MARK: -Life
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tuneView()
-        addSub()
         setUp()
-        configure()
     }
     
 //MARK: -Func
     
     private func tuneView(){
-        view.backgroundColor = .grayColor
+        view.backgroundColor = UIColor(named: "barColor")
+        navigationController?.navigationBar.prefersLargeTitles = true
         title = "Информация"
         
     }
-    
-    private func addSub(){
         
+    
+    private func setUp(){
         
         view.addSubview(mainView)
         mainView.addSubview(infoScroll)
         mainView.addSubview(infoText)
-
-    }
-    
-    private func setUp(){
+        
         let safeAreaGuide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             
@@ -76,21 +70,11 @@ class InfoViewController: UIViewController {
             infoScroll.rightAnchor.constraint(equalTo: mainView.rightAnchor),
             infoScroll.bottomAnchor.constraint(equalTo: mainView.bottomAnchor),
             
-            
-//            label.topAnchor.constraint(equalTo: infoScroll.topAnchor, constant: 30),
-//            label.leftAnchor.constraint(equalTo: infoScroll.leftAnchor, constant: 10),
-
-
             infoText.topAnchor.constraint(equalTo:  infoScroll.topAnchor),
-            infoText.leftAnchor.constraint(equalTo: infoScroll.leftAnchor, constant: 5),
+            infoText.leftAnchor.constraint(equalTo: infoScroll.leftAnchor),
             infoText.rightAnchor.constraint(equalTo: infoScroll.rightAnchor),
             infoText.bottomAnchor.constraint(equalTo: infoScroll.bottomAnchor),
             
-            
-            
         ])
-    }
-    private func configure(){
-        infoText.text = info
     }
 }
