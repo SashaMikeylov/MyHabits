@@ -5,7 +5,6 @@ import UIKit
 
 final class HabitsViewController: UIViewController {
     
-    
     private let mainView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -42,6 +41,7 @@ final class HabitsViewController: UIViewController {
         addBarButton()
         setUp()
         self.habitCollection.reloadData()
+    
     
     }
     
@@ -139,8 +139,6 @@ final class HabitsViewController: UIViewController {
         alertController.addAction(alertAction1)
         present(alertController, animated: true)
     }
-    
-    
 }
 
 //MARK: - Extensions

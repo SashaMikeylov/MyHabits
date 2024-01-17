@@ -55,6 +55,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		247E5F332B558D8200C37CA9 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				24C1194F2A49CED80079F210 /* InfoViewController.swift */,
+				24C1195C2A4AFB3D0079F210 /* HabitViewController.swift */,
+				24C119672A5412340079F210 /* HabitDetailsViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		24C119242A497FBA0079F210 = {
 			isa = PBXGroup;
 			children = (
@@ -76,9 +86,9 @@
 			children = (
 				24C119492A49CD1A0079F210 /* Resourses */,
 				24C1194E2A49CEB10079F210 /* Controllers */,
-				24D8B54F2B4BF80300559051 /* Extensions */,
 				24D8B5522B53093900559051 /* Services */,
 				24C1194D2A49CD670079F210 /* Source */,
+				24D8B54F2B4BF80300559051 /* Extensions */,
 				24C1E31F2A5B16A10043B15E /* LaunchScreen.storyboard */,
 				24C1E34C2A5C45A50043B15E /* Assets.xcassets */,
 				24C1193E2A497FBE0079F210 /* Info.plist */,
@@ -107,9 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				24C119602A4EF2980079F210 /* HabitsViewControler */,
-				24C1194F2A49CED80079F210 /* InfoViewController.swift */,
-				24C1195C2A4AFB3D0079F210 /* HabitViewController.swift */,
-				24C119672A5412340079F210 /* HabitDetailsViewController.swift */,
+				247E5F332B558D8200C37CA9 /* Controllers */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
