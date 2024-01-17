@@ -138,8 +138,13 @@ final class HabitCollectionViewCell: UICollectionViewCell {
         
         if HabitsStore.shared.habits[index].isAlreadyTakenToday == false {
             notSelectedButton()
+            NotificationService.shared.notify(date: HabitsStore.shared.habits[index].date,
+                                                                 nameOfHabbit: HabitsStore.shared.habits[index].name,
+                                                                 id: index)
         } else {
+            NotificationService.shared.removeNotification(indetifier: index)
             selectedButton()
+            
         }
     }
     
@@ -159,9 +164,9 @@ final class HabitCollectionViewCell: UICollectionViewCell {
     @objc func checkAction(){
         
         let index = habitName.tag
-        
+        AudioServicesPlayAlertSound(SystemSoundID(1520))
         if HabitsStore.shared.habits[index].isAlreadyTakenToday == false {
-            AudioServicesPlayAlertSound(SystemSoundID(1520))
+           
             notSelectedButton()
             HabitsStore.shared.track(HabitsStore.shared.habits[index])
             habitCounter.text = "\(HabitsStore.shared.habits[index].trackDates.count )"

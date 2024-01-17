@@ -1,13 +1,11 @@
 
 
 import Foundation
-
 import UIKit
 
 final class HabitDetailsViewController: UIViewController {
     
    var index: Int = 0
-    
     
     private lazy var tableView: UITableView = {
         let table = UITableView()
@@ -31,9 +29,12 @@ final class HabitDetailsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+    
         if del == true {
             self.navigationController?.popViewController(animated: true)
             del = false
+        } else {
+            title = HabitsStore.shared.habits[index].name
         }
     }
     
@@ -45,13 +46,6 @@ final class HabitDetailsViewController: UIViewController {
         title = HabitsStore.shared.habits[index].name
         navigationController?.navigationBar.prefersLargeTitles = false
     }
-    
-    
-    
-        
-    
-    
-    
     
     private func setUp(){
         
